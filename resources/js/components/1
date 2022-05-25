@@ -1,0 +1,130 @@
+<template>
+    <div>
+        <h1>これはユーザ投稿画面。DBに値が保存される</h1>
+	      <form @submit.prevent="tweetCreate">
+	      <h3>ここに入ってきた値のIDをDBに保存する必要がある→{{selectItemName}}IDは{{selectItemId}}</h3>
+	          <input type="text" v-model="keyword">
+		           <div v-for="item in itemName" :key="item.id">
+			             <button @click="putItem(item.product_name , item.id)" v-html="item.product_name" :value="item.id" />
+			         </div>
+				    <input type="text" value="selectItemName" id="selectitemId">
+	          <!--item:
+		        <select v-model="newtweet.item">
+	          <template v-for="(item, index) in items">
+	              <option v-html="item.product_name" :key="`item_product_name_${index}`" :value="item.id" />
+	          </template>
+		        </select>-->
+		        text:
+			      <input type="text" v-model="newtweet.text">
+		        topping:
+			      <select v-model="newtweet.topping">
+			          <option>チョコ</option>
+			          <option>デカフェ</option>
+			          <option>クリーム</option>
+				    </select>
+				    tea:
+				    <select v-model="newtweet.tea">
+				        <option>豆乳</option>
+					　　　<option>アールグレイ</option>
+				    </select>
+	          <button>送信</button>
+	      </form>
+	      <template>
+	      <div v-for="(file, index) in files">
+            <label>ファイルを選択する</label>
+	          <input type="file" @change="onFileChange($event, file, index)" />
+	      </div>
+	      <button @click="upload">送信</button>
+	      </template>
+	      <!--<div>
+	      <h3>ここに入ってきた値のIDをDBに保存する必要がある→{{selectItemName}}IDは{{selectItemId}}</h3>
+	          <input type="text" v-model="keyword">
+		           <div v-for="item in itemName" :key="item.id">
+			             <button @click="putItem(item.product_name , item.id)" v-html="item.product_name" :value="item.id" />
+			         </div>
+	      </div>-->
+    </div>
+</template>
+<script>
+export default{
+    data(){
+        return{
+	          newtweet:{
+		          item:"",
+		          text:"",
+			        topping:"",
+				      tea:""
+		       },
+		       items:'',
+		       files:[],
+		       keyword:'',
+		       selectItemName:'',
+		       selectItemId:''
+	      };
+    },
+    created(){
+        this.getProductName();
+    },
+    computed:{
+        //ファイルをソートする処理を書く
+	      itemName: function(){
+	          let items = [];
+		        for(let i in this.items){
+			         let item = this.items[i];
+				       
+				       if(item.product_name.indexOf(this.keyword) !== -1){
+				           items.push(item);
+				       }
+			     }
+			     return items;
+	      }
+    },
+    methods:{
+          tweetCreate(){
+	           axios.post(`/api/tweet`, {
+			       kinds: this.newtweet
+			       }).then((response) => {
+			       console.log('登録処理が成功しました!');
+			       }).catch((error) => {
+			         console.error(error);
+				     });
+	        },
+		     getProductName(){
+		         axios.get('/api/itemsview')
+			       .then((res)=>{
+			           console.log("111",res.data);
+				         this.items = res.data;
+			       }).catch((err)=>{console.log(err);
+			       });
+			     },
+			     upload(){
+			     //ヘッダー定義
+			     const config = {
+			         headers:{
+			          'content-type':'multipart/form-data'
+				       }
+			       };
+
+			       let formData = new FormData();
+			       let requestFiles = this.files.filter((file)=>file)//ファイルがあるものだけを取得
+             requestFiles.forEach((file,index)=>{
+	             formData.append('files[' + index + ']', file)//formDataに追加していく
+	           })
+		         axios.post(`/api/image`, formData, config).then((res)=>{
+			         console.log(res.data);
+			       })
+			     },
+			     putItem(itemname, itemid){
+			     //inputタグの中にクリックしたitem.product_nameを突っ込みたい(いったんidを突っ込む)
+             this.selectItemName = itemname;
+	           this.selectItemId = itemid;
+	         }
+		     }
+	    }
+</script>
+<style>
+   h3{
+       background-color:blue;
+       color:#fff;
+   }
+</style>

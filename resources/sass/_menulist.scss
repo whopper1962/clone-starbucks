@@ -1,0 +1,9 @@
+.menulist {
+    &_img {
+        width:100%;
+	  &:hover{
+	      transition:0.5s;
+	      opacity:0.7;
+	  }
+    }
+}

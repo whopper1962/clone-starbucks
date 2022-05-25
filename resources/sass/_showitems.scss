@@ -1,0 +1,24 @@
+.showitems {
+  width:85vw;
+  margin:auto;
+  &_ttl {
+    padding:10px;
+  }
+  &_img {
+    width:350px;
+  }
+  &_flexbox {
+    display:flex;
+  &-item {
+    padding:0 0 0 35px;
+    &--catch{
+      font-size:0.9rem;
+      font-weight: 900;
+     }
+    }
+  }
+}
+.fontgray {
+    color:#808080;
+    font-size:0.7rem;
+}

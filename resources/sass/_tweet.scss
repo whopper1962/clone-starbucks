@@ -1,0 +1,56 @@
+.tweet {
+ &_container {
+   background: #fffaf0;
+   padding:0 0 40px 0;
+   &-box {
+     width:90vw;
+     margin:0 auto;
+     &--text{
+      textarea{
+       background-color: #e6e6e6;
+       padding:10px;
+       height:70px;
+      }
+      select{
+       background-color: #e6e6e6;
+       padding:15px;
+       color:#000;
+       border:0.6px solid #b3b3b3;
+      }
+     }
+     &--cream{
+     }
+     &--changecream{
+     }
+     &--milk{
+     }
+     &--powder{
+     }
+     &--source{
+     }
+     &--ice{
+     }
+     &--file{
+        padding:20px;
+	     img{
+	        padding:5px;
+	     }
+     }
+     &--btn{
+        width:100%;
+	      padding:10px;
+     }
+   }
+ }
+}
+
+.form-select {
+  width:100%;
+}
+.ttl{
+ font-size:18px;
+ border:solid 1px #333;
+ margin-top: 20px;
+ display:inline-block;
+
+}
